@@ -23,7 +23,8 @@
    ```
 2. Open the project in Android Studio.
 3. Add the google-services.json file to the app/ folder (downloadable from the Firebase Console) or You can follow to instructions in this page: https://firebase.google.com/docs/auth.
-4. Build and run the application on an Android device or emulator.
+4. Download all dependencies of Google and Firebase by click Download Source in Grade section.
+5. Build and run the application on an Android device or emulator.
 
 ## 📌 How to Use
 1. Sign Up / Log In:
