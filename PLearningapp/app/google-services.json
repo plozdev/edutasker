@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "399120246442",
+    "project_id": "p-learning-2098e",
+    "storage_bucket": "p-learning-2098e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:399120246442:android:f152e5c47c7e8625ced2d3",
+        "android_client_info": {
+          "package_name": "com.example.plearningapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "399120246442-4m1mfbgh0429391suknjkaqcpgnutepa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1VVAEGGzECyk_TOpF56mQcb55-YW5Y5c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "399120246442-4m1mfbgh0429391suknjkaqcpgnutepa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
