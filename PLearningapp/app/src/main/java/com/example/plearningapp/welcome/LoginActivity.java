@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.plearningapp.MainActivity;
 import com.example.plearningapp.R;
+import com.example.plearningapp.func.information.ForgotPassword;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -19,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private TextView notMember;
+    private TextView notMember, forgotPass;
     private EditText email, password;
     private Button signIn;
 
@@ -41,13 +42,19 @@ public class LoginActivity extends AppCompatActivity {
                 signInWithEmail();
             }
         });
-
+        forgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, ForgotPassword.class));
+            }
+        });
     }
     private void thamChieu() {
         notMember = findViewById(R.id.not_member_text);
         email = findViewById(R.id.emailEditText_login);
         password = findViewById(R.id.passwordEditText_login);
         signIn = findViewById(R.id.login_button);
+        forgotPass = findViewById(R.id.forgot_pass_tv);
     }
     private void signInWithEmail() {
         String gmail, pass;

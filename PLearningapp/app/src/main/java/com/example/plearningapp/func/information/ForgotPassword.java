@@ -1,4 +1,4 @@
-package com.example.plearningapp.welcome;
+package com.example.plearningapp.func.information;
 
 import static android.content.ContentValues.TAG;
 
@@ -14,14 +14,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.plearningapp.R;
+import com.example.plearningapp.welcome.LoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
-    private EditText gmail;
-    private Button change;
-    private TextView returnButton;
+public class ForgotPassword extends AppCompatActivity {
+    EditText gmail;
+    Button change;
+    TextView returnButton;
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,13 +34,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String gmailText = gmail.getText().toString();
                 changePass(gmailText);
-                returnButton.setVisibility(View.VISIBLE);
             }
         });
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ForgotPasswordActivity.this, LoginActivity.class));
+                startActivity(new Intent(ForgotPassword.this, LoginActivity.class));
             }
         });
     }
@@ -48,14 +49,16 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         returnButton = findViewById(R.id.forgot_pass_return);
     }
     private void changePass(String emailAddress) {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.sendPasswordResetEmail(emailAddress)
+        mAuth.sendPasswordResetEmail(emailAddress)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(ForgotPasswordActivity.this, "Email sent!", Toast.LENGTH_LONG).show();
-//                            Log.d(TAG, "Email sent.");
+                            Toast.makeText(ForgotPassword.this, "Email sent!", Toast.LENGTH_LONG).show();
+                            Log.d(TAG, "Email sent.");
+                            returnButton.setVisibility(View.VISIBLE);
+                        } else {
+                            Toast.makeText(ForgotPassword.this, "Failed to sent\n Try later!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

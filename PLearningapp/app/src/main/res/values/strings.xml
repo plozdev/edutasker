@@ -1,10 +1,18 @@
 <resources>
-    <string name="app_name">PLearning</string>
+    <string name="app_name">pLearning</string>
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
+    <string name="change_avatar">Change Avatar</string>
+    <string name="change_password">Change Password</string>
+    <string name="update_info">Update Information</string>
     <string name="create">Create new Account</string>
     <string name="already">Already Registered? Log in here.</string>
     <string name="not_yet">Not a member yet? Register here!</string>
+    <string name="forgot_pass_title">Forgot\nPassword</string>
+    <string name="forgot_pass_subtitle">New password</string>
+    <string name="forgot_pass_button">SEND</string>
+    <string name="save_button">SAVE</string>
+    <string name="forgot_pass_return"><u>Click here to return</u></string>
 
     <string name="hint_mail">Enter email</string>
     <string name="hint_password">Enter password</string>
@@ -32,4 +40,8 @@
 
     <string name="nobody">NULL</string>
 
+    <string name="add_title">Add Information</string>
+    <string name="add_name">Tiêu đề</string>
+    <string name="add_subject">Môn</string>
+    <string name="add_description">Mô tả</string>
 </resources>

@@ -43,13 +43,14 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.bom)
     implementation(libs.firebase.storage)
+    implementation("com.google.firebase:firebase-database:21.0.0")
 
     implementation (libs.glide)
-    //GOOGLE
     implementation (libs.play.services.auth)
     implementation (libs.credentials)
     implementation (libs.credentials.play.services.auth)
     implementation (libs.googleid)
+    implementation(libs.firebase.firestore)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

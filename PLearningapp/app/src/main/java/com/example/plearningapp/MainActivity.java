@@ -15,7 +15,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.plearningapp.navigator.AboutFragment;
-import com.example.plearningapp.navigator.ChatsFragment;
 import com.example.plearningapp.navigator.HomeFragment;
 import com.example.plearningapp.navigator.SettingsFragment;
 import com.example.plearningapp.navigator.ShareFragment;
@@ -56,8 +55,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int check = item.getItemId();
         if (check == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        } else if (check == R.id.nav_chats) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ChatsFragment()).commit();
         } else if (check == R.id.nav_settings) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
         } else if (check == R.id.nav_share) {
@@ -71,14 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
+
 
     private void changeNameAndGmail(NavigationView navigationView) {
         View headerView = navigationView.getHeaderView(0);
