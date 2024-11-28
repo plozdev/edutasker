@@ -13,12 +13,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-import com.example.plearningapp.navigator.AboutFragment;
 import com.example.plearningapp.navigator.HomeFragment;
-import com.example.plearningapp.navigator.SettingsFragment;
-import com.example.plearningapp.navigator.ShareFragment;
-import com.example.plearningapp.welcome.SignUpActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,15 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int check = item.getItemId();
         if (check == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        } else if (check == R.id.nav_settings) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
-        } else if (check == R.id.nav_share) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ShareFragment()).commit();
-        } else if (check == R.id.nav_about) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutFragment()).commit();
-        } else if (check == R.id.nav_logout) {
-            mAuth.signOut();
-            startActivity(new Intent(this, SignUpActivity.class));
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

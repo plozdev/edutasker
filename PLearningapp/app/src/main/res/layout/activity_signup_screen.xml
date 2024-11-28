@@ -118,7 +118,7 @@
         android:textColorHint="@color/grey"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:id="@+id/signupButton"
         android:text="@string/signup"
@@ -132,24 +132,6 @@
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="30dp"
-        android:padding="10dp"/>
+        android:padding="15dp"/>
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/googleSignupButton"
-        android:text="@string/signup_login_gg"
-        android:fontFamily="@font/font"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:background="@drawable/signup_button"
-        app:backgroundTint="@null"
-        android:textColor="@color/white"
-        android:layout_below="@id/signupButton"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginHorizontal="30dp"
-        android:drawableBottom="@drawable/google36"
-        android:padding="10dp"
-        android:visibility="gone"/>
 </RelativeLayout>

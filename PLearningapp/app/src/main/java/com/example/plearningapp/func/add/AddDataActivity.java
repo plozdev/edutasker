@@ -1,60 +1,58 @@
 package com.example.plearningapp.func.add;
-
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.plearningapp.MainActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import com.example.plearningapp.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.plearningapp.adapter.FileAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 public class AddDataActivity extends AppCompatActivity {
 
+    private static final int FILE_REQUEST_CODE = 1;
     Button saveButton;
-    EditText uploadName, uploadSubject, uploadDescription;
-    String name, subject, description;
+    AutoCompleteTextView autoCompleteTextView;
+    private ArrayAdapter<String> adapterItems;
+    private static final String[] OBJECTS = new String[] { "Toán", "Văn", "Anh", "Lý", "Hóa", "Sinh", "Sử", "Địa", "GDCD", "Công nghệ", "Tin học", "Thể dục", "Âm nhạc", "Mỹ thuật", "Ngoại ngữ", "GDQP", "GDTC"};
+
+
+    String subject;
     ImageView uploadFile;
-    ProgressBar progressBar;
     //OpenFile
     private ActivityResultLauncher<Intent> openFileLauncher;
     //AUTH
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     //FireStore
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String userId = mAuth.getCurrentUser().getUid();
+    private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("users").child(userId);
     //Storage
-
-
+    private RecyclerView listFileRecyclerView;
+    private FileAdapter fileAdapter;
+    private List<String> selectedFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,49 +60,105 @@ public class AddDataActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_data);
         thamChieu();
         saveButton.setEnabled(false);
+        setAutoCompleteTextView();
+        setSelectedFiles();
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveDataDatabase();
+
             }
         });
+        filePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        Intent data = result.getData();
+                        if (data.getClipData() != null) {
+                            // Handle multiple files
+                            int count = data.getClipData().getItemCount();
+                            for (int i = 0; i < count; i++) {
+                                Uri fileUri = data.getClipData().getItemAt(i).getUri();
+                                if (getContentResolver().getType(fileUri).equals("application/pdf")) {
+                                    selectedFiles.add(fileUri.getLastPathSegment());
+                                } else {
+                                    Toast.makeText(this, "Only PDF files are allowed.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } else if (data.getData() != null) {
+                            // Handle single file
+                            Uri fileUri = data.getData();
+                            if (getContentResolver().getType(fileUri).equals("application/pdf")) {
+                                selectedFiles.add(fileUri.getLastPathSegment());
+                            } else {
+                                Toast.makeText(this, "Only PDF files are allowed.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        fileAdapter.notifyDataSetChanged();
+                    }
+                }
+        );
         uploadFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFilePicker();
+
                 saveButton.setEnabled(true);
             }
         });
 
     }
-    private void thamChieu() {
-        saveButton = findViewById(R.id.saveButton);
-        uploadDescription = findViewById(R.id.uploadDescription);
-        uploadName = findViewById(R.id.uploadName);
-        uploadSubject = findViewById(R.id.uploadSubject);
-        uploadFile = findViewById(R.id.upload_file);
+    private void setSelectedFiles() {
+        selectedFiles = new ArrayList<>();
+        fileAdapter = new FileAdapter(selectedFiles);
+        listFileRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        listFileRecyclerView.setAdapter(fileAdapter);
+    }
+    private void setAutoCompleteTextView() {
+        adapterItems = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, OBJECTS);
+        autoCompleteTextView.setAdapter(adapterItems);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                subject = parent.getItemAtPosition(position).toString();
+            }
+        });
     }
 
-    private void saveDataDatabase() {
-        name = uploadName.getText().toString();
-        subject = uploadSubject.getText().toString();
-        description = uploadDescription.getText().toString();
-        DataClass dataClass = new DataClass(name, subject, description);
-        Map<String, Object> data = new HashMap<>();
-        data.put(subject, dataClass);
-        db.collection("sampleData")
-                .document(mAuth.getCurrentUser().getUid())
-                .update(data)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d("Firestore", "DocumentSnapshot added with ID");
-                    Toast.makeText(AddDataActivity.this, "Successful", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AddDataActivity.this, MainActivity.class));
-                })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(AddDataActivity.this, "Something wrong\nTry again!", Toast.LENGTH_SHORT).show();
-                    Log.w("Firestore", "Error adding document", e);
-                });
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == FILE_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//            if (data.getClipData() != null) {
+//                int count = data.getClipData().getItemCount();
+//                for (int i = 0; i < count; i++) {
+//                    Uri fileUri = data.getClipData().getItemAt(i).getUri();
+//                    if (getContentResolver().getType(fileUri).equals("application/pdf")) {
+//                        selectedFiles.add(fileUri.getLastPathSegment());
+//                    } else {
+//                        // Show an error if the file is not a PDF
+//                        Toast.makeText(this, "Only PDF files are allowed.", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            } else if (data.getData() != null) {
+//                Uri fileUri = data.getData();
+//                if (getContentResolver().getType(fileUri).equals("application/pdf")) {
+//                    selectedFiles.add(fileUri.getLastPathSegment());
+//                } else {
+//                    Toast.makeText(this, "Only PDF files are allowed.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            fileAdapter.notifyDataSetChanged();
+//        }
+//    }
 
+    private void thamChieu() {
+        saveButton = findViewById(R.id.saveButton);
+        uploadFile = findViewById(R.id.upload_file);
+        autoCompleteTextView = findViewById(R.id.auto_complete_txt);
+        listFileRecyclerView = findViewById(R.id.file_list);
     }
 
     private void uploadFileToStorage(Uri fileUri) {
@@ -125,6 +179,8 @@ public class AddDataActivity extends AppCompatActivity {
                     // Get the download URL of the uploaded file
                     fileRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         Log.d("FileUpload", "File uploaded successfully: " + uri.toString());
+                        uploadFile.setVisibility(View.GONE);
+                        listFileRecyclerView.setVisibility(View.VISIBLE);
                         saveFileMetadataToFirestore(fileName, uri.toString());
                     });
                 })
@@ -160,21 +216,14 @@ public class AddDataActivity extends AppCompatActivity {
     }
 
 
-    private ActivityResultLauncher<Intent> filePickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    Uri fileUri = result.getData().getData();
-                    uploadFileToStorage(fileUri); // Upload selected file
-                }
-            }
-    );
+    private ActivityResultLauncher<Intent> filePickerLauncher;
+
 
     private void openFilePicker() {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*"); // Accept all file types
-        filePickerLauncher.launch(intent);
+        intent.setType("*/application/pdf*");
+        filePickerLauncher.launch(Intent.createChooser(intent, "Choose PDF Files"));
     }
 
     @SuppressLint("Range")

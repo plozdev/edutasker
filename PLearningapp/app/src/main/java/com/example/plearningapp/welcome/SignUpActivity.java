@@ -64,6 +64,8 @@ public class SignUpActivity extends AppCompatActivity {
             passwordEditText.setError("Password is required");
         } else if (name.isEmpty()) {
             nameEditText.setError("Name is required");
+        } else if (password.length() < 6) {
+            passwordEditText.setError("Password must be at least 6 characters");
         } else {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

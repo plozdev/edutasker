@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">pLearning</string>
+    <string name="app_name">EduTasker</string>
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
     <string name="change_avatar">Change Avatar</string>
@@ -40,8 +40,12 @@
 
     <string name="nobody">NULL</string>
 
-    <string name="add_title">Add Information</string>
-    <string name="add_name">Tiêu đề</string>
-    <string name="add_subject">Môn</string>
-    <string name="add_description">Mô tả</string>
+    <string name="add_title">Add Files</string>
+    <string name="add_subject">Select subject</string>
+
+    <string name="confirm_pass">Confirm Password</string>
+    <string name="new_pass">New Password</string>
+    <string name="current_pass">Current Password</string>
+
+    <string name="already_verified">Authenticate <i>(Verified)</i></string>
 </resources>

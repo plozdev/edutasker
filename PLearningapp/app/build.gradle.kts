@@ -43,8 +43,10 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.bom)
     implementation(libs.firebase.storage)
+    implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("com.google.firebase:firebase-database:21.0.0")
-
+    implementation("com.google.android.material:material:1.8.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation (libs.glide)
     implementation (libs.play.services.auth)
     implementation (libs.credentials)
