@@ -1,4 +1,4 @@
-package com.example.plearningapp.adapter;
+package com.example.plearningapp.file;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +10,11 @@ import com.example.plearningapp.R;
 
 import java.util.List;
 
-public class FileAdapter extends RecyclerView.Adapter<FileAdapter.FileViewHolder> {
+public class FileAdapterAdd extends RecyclerView.Adapter<FileAdapterAdd.FileViewHolder> {
 
     private List<String> fileList;
 
-    public FileAdapter(List<String> fileList) {
+    public FileAdapterAdd(List<String> fileList) {
         this.fileList = fileList;
     }
 

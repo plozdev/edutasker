@@ -34,7 +34,7 @@
             android:name=".func.information.ChangeAvatar"
             android:exported="false" />
         <activity
-            android:name=".func.add.AddDataActivity"
+            android:name=".func.add.AddFilesActivity"
             android:exported="false" />
         <activity
             android:name=".func.information.ForgotPassword"
@@ -60,6 +60,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+    </application>
 </manifest>
