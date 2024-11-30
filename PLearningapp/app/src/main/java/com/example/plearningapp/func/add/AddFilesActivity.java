@@ -1,25 +1,39 @@
 package com.example.plearningapp.func.add;
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.plearningapp.MainActivity;
+import com.example.plearningapp.ProfileActivity;
 import com.example.plearningapp.R;
-import com.example.plearningapp.file.FileAdapterAdd;
+import com.example.plearningapp.file.add.FileAdapterAdd;
+import com.example.plearningapp.func.information.Authenticate;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
@@ -31,14 +45,18 @@ public class AddFilesActivity extends AppCompatActivity {
 
     private static final String[] OBJECTS = new String[] { "Toán", "Ngữ Văn", "Anh", "Lý", "Hóa", "Sinh", "Sử", "Địa", "GDCD", "Công nghệ", "Tin học", "Thể dục", "Âm nhạc", "Mỹ thuật", "Ngoại ngữ", "GDQP", "GDTC"};
 
-    Button saveButton, tryButton;
+//    Button saveButton, tryButton;
     AutoCompleteTextView autoCompleteTextView;
     ArrayAdapter<String> adapterItems;
 
     String subject;
-    ImageView uploadFile, tryUploadFile;
+    ImageView uploadFile, tryUploadFile, back;
+    RecyclerView listFileRecyclerView;
+    FileAdapterAdd fileAdapterAdd;
+    List<String> selectedFiles;
+    ProgressBar progressBar;
     //AUTH
-    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
     //FireStore
     private final String userId = mAuth.getCurrentUser().getUid();
     private final FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -46,9 +64,6 @@ public class AddFilesActivity extends AppCompatActivity {
 
     private final StorageReference storageRef = storage.getReference("users").child(userId).child("files");
     //Storage
-     RecyclerView listFileRecyclerView;
-     FileAdapterAdd fileAdapterAdd;
-     List<String> selectedFiles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,31 +71,35 @@ public class AddFilesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_files);
         thamChieu();
         setAutoCompleteTextView();
+
+        back.setOnClickListener(v -> startActivity(new Intent(AddFilesActivity.this, MainActivity.class)));
+
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> subject = adapterItems.getItem(position));
-        tryUploadFile.setOnClickListener(v -> {
-            if (!autoCompleteTextView.isActivated()) {
-                if (subject==null) {
+        uploadFile.setOnClickListener(v -> {
+                if (subject==null && autoCompleteTextView.getText().toString().isEmpty()) {
                     autoCompleteTextView.setError("Fill subject");
                     return;
                 }
                 subject = autoCompleteTextView.getText().toString();
-                tryUploadFile.setVisibility(View.GONE);
-                uploadFile.setVisibility(View.VISIBLE);
+//                tryUploadFile.setVisibility(View.GONE);
+//                uploadFile.setVisibility(View.VISIBLE);
                 openFilePicker();
-                setSelectedFiles();
-            }
+//                setSelectedFiles();
+
         });
 
-        tryButton.setOnClickListener(v ->Toast.makeText(AddFilesActivity.this, "Uploading", Toast.LENGTH_LONG).show());
-        saveButton.setOnClickListener(v -> startActivity(new Intent(AddFilesActivity.this, MainActivity.class)));
-        uploadFile.setOnClickListener(v -> {
-            if (subject==null) {
-                autoCompleteTextView.setError("Fill subject");
-                return;
-            }
-            openFilePicker();
-            setSelectedFiles();
-        });
+//        tryButton.setOnClickListener(v -> {
+//
+//        });
+//        saveButton.setOnClickListener(v -> startActivity(new Intent(AddFilesActivity.this, MainActivity.class)));
+
+//        uploadFile.setOnClickListener(v -> {
+//            if (subject==null) {
+//                autoCompleteTextView.setError("Fill subject");
+//                return;
+//            }
+//            openFilePicker();
+//        });
     }
     //HIEN THI FILE
     private void setSelectedFiles() {
@@ -97,10 +116,12 @@ public class AddFilesActivity extends AppCompatActivity {
 
     //THAM CHIEU
     private void thamChieu() {
-        saveButton = findViewById(R.id.saveButton);
-        tryButton = findViewById(R.id.tryButton);
+//        saveButton = findViewById(R.id.saveButton);
+//        tryButton = findViewById(R.id.tryButton);
         uploadFile = findViewById(R.id.upload_file);
-        tryUploadFile = findViewById(R.id.try_upload_file);
+        back = findViewById(R.id.back);
+//        tryUploadFile = findViewById(R.id.try_upload_file);
+        progressBar = findViewById(R.id.progess_bar);
         autoCompleteTextView = findViewById(R.id.auto_complete_txt);
         listFileRecyclerView = findViewById(R.id.file_list);
     }
@@ -136,6 +157,7 @@ public class AddFilesActivity extends AppCompatActivity {
         filePickerLauncher.launch(Intent.createChooser(intent, "Select a File"));
     }
     private void doUploadTasks(Uri uriFile) {
+        progressBar.setVisibility(View.VISIBLE);
         storageRef.putFile(uriFile).addOnSuccessListener(taskSnapshot -> {
             storageRef.getDownloadUrl().addOnCompleteListener(task -> {
                if (task.isSuccessful()) {
@@ -150,20 +172,74 @@ public class AddFilesActivity extends AppCompatActivity {
                    db.collection("sampleData").document(userId).collection("files")
                            .add(metadata)
                            .addOnSuccessListener(documentReference -> {
-                                tryButton.setVisibility(View.GONE);
-                                saveButton.setVisibility(View.VISIBLE);
+//                                tryButton.setVisibility(View.GONE);
+//                                saveButton.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.GONE);
+                                uploadFile.setVisibility(View.GONE);
+                                listFileRecyclerView.setVisibility(View.VISIBLE);
+                                setSelectedFiles();
+                                fetchRecentUploads();
+
+                                showSuccessDialog();
                                 Log.d("Firestore", "Metadata added with ID: " + documentReference.getId());
                            })
                            .addOnFailureListener(e -> {
+                               progressBar.setVisibility(View.GONE);
                                Log.w("Firestore", "Error adding metadata", e);
                            });
                } else {
+                   progressBar.setVisibility(View.GONE);
                     Log.e("Firebase Storage", "doUploadTasks: ", task.getException());
                }
             });
                 })
                 .addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
                     Log.e("Firebase Storage", "doUploadTasks: ", e);
                 });
+    }
+    private void fetchRecentUploads() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("sampleData").document(userId).collection("files")
+                .orderBy("timestamp", Query.Direction.DESCENDING) // Sort by timestamp
+                .limit(10) // Limit to the 10 most recent uploads
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<String> uploads = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String fileName = document.getString("fileName");
+                            uploads.add(fileName);
+                        }
+                        fileAdapterAdd.updateData(uploads); // Update the adapter with new data
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Error fetching recent uploads: " + e.getMessage());
+                        Toast.makeText(AddFilesActivity.this, "Failed to load uploads", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+    private void showSuccessDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(AddFilesActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog, null);
+        builder.setView(dialogView);
+
+        final AlertDialog dialog = builder.create();
+        dialog.show();
+        TextView title = dialogView.findViewById(R.id.textview_dialog);
+        title.setText("Upload Successfully!");
+        Button buttonBack = dialogView.findViewById(R.id.button);
+        buttonBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                startActivity(new Intent(AddFilesActivity.this, MainActivity.class));
+            }
+        });
     }
 }

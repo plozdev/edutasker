@@ -1,4 +1,4 @@
-package com.example.plearningapp.file;
+package com.example.plearningapp.file.add;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +35,11 @@ public class FileAdapterAdd extends RecyclerView.Adapter<FileAdapterAdd.FileView
     @Override
     public int getItemCount() {
         return fileList.size();
+    }
+    public void updateData(List<String> newFileUploadList) {
+        this.fileList.clear();
+        this.fileList.addAll(newFileUploadList);
+        notifyDataSetChanged();
     }
 
     static class FileViewHolder extends RecyclerView.ViewHolder {

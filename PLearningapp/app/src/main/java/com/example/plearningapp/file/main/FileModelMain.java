@@ -1,4 +1,4 @@
-package com.example.plearningapp.file;
+package com.example.plearningapp.file.main;
 
 public class FileModelMain {
     private String name, date, subject, downloadUrl;
