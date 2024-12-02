@@ -1,4 +1,4 @@
-package com.example.plearningapp;
+package com.example.plearningapp.main;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -13,7 +13,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import com.example.plearningapp.navigator.HomeFragment;
+
+import com.example.plearningapp.func.ProfileActivity;
+import com.example.plearningapp.R;
+import com.example.plearningapp.todo.TodoFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,13 +24,11 @@ import com.google.firebase.auth.UserInfo;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private FirebaseAuth mAuth;
     private DrawerLayout drawerLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mAuth = FirebaseAuth.getInstance();
 
         //NAV_SIDE
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int check = item.getItemId();
         if (check == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        } else if (check == R.id.nav_todo) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new TodoFragment()).commit();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -86,11 +89,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void profileClick(NavigationView navigationView) {
         View headerView = navigationView.getHeaderView(0);
         ImageView avatar = headerView.findViewById(R.id.nav_avatar);
-        avatar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-            }
-        });
+        avatar.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
     }
 }

@@ -1,4 +1,4 @@
-package com.example.plearningapp.func.information;
+package com.example.plearningapp.func;
 
 import static android.content.ContentValues.TAG;
 

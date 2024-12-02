@@ -1,16 +1,11 @@
-package com.example.plearningapp.file.main;
-
+package com.example.plearningapp.main;
 public class FileModelMain {
-    private String name, date, subject, downloadUrl;
+    private String name, date, subject;
 
-    public FileModelMain(String name, String date, String subject, String downloadUrl) {
+    public FileModelMain(String name, String date, String subject) {
         this.name = name;
         this.date = date;
         this.subject = subject;
-        this.downloadUrl = downloadUrl;
-    }
-    public String getDownloadUrl() {
-        return downloadUrl;
     }
     public String getName() {
         return name;

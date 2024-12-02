@@ -13,6 +13,7 @@
     <string name="forgot_pass_button">SEND</string>
     <string name="save_button">SAVE</string>
     <string name="forgot_pass_return"><u>Click here to return</u></string>
+    <string name="authenticate">Authenticate <i>(False)</i></string>
 
     <string name="hint_mail">Enter email</string>
     <string name="hint_password">Enter password</string>
@@ -48,4 +49,5 @@
     <string name="current_pass">Current Password</string>
 
     <string name="already_verified">Authenticate <i>(Verified)</i></string>
+    <string name="to_do">To-Do List</string>
 </resources>

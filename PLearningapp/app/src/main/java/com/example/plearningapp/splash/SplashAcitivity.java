@@ -6,7 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.plearningapp.MainActivity;
+import com.example.plearningapp.main.MainActivity;
 import com.example.plearningapp.R;
 import com.example.plearningapp.welcome.SignUpActivity;
 import com.google.firebase.auth.FirebaseAuth;

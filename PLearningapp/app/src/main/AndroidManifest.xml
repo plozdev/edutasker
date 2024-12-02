@@ -22,25 +22,15 @@
         android:theme="@style/Theme.PLearningapp"
         tools:targetApi="34">
         <activity
-            android:name=".func.information.ChangeEmail"
+            android:name=".func.AddFilesActivity"
             android:exported="false" />
         <activity
-            android:name=".func.information.Authenticate"
+            android:name=".func.ForgotPassword"
+            android:exported="false" />
+        <activity android:name=".func.ChangePassword"
             android:exported="false" />
         <activity
-            android:name=".func.information.ChangePassword"
-            android:exported="false" />
-        <activity
-            android:name=".func.information.ChangeAvatar"
-            android:exported="false" />
-        <activity
-            android:name=".func.add.AddFilesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".func.information.ForgotPassword"
-            android:exported="false" />
-        <activity
-            android:name=".ProfileActivity"
+            android:name=".func.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".welcome.SignUpActivity"
@@ -49,7 +39,7 @@
             android:name=".welcome.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".main.MainActivity"
             android:exported="false" />
         <activity
             android:name=".splash.SplashAcitivity"
