@@ -1,6 +1,6 @@
-# P_Learning App
+# LearnShpere
 
-**P_Learning App** is a learning support application designed for students to connect and enhance their group learning experience efficiently and conveniently.
+**LearnSphere** is a smart study management app designed to help students organize their learning materials, practice for exams, and stay on top of their academic tasks. With a focus on efficiency and accessibility, LearnSphere empowers users to achieve their academic goals effectively.
 
 ## 🚀 Key Features
 - **Sign Up / Log In**: Secure and easy access using Firebase Authentication.
