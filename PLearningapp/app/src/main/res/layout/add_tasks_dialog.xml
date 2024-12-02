@@ -30,6 +30,22 @@
             android:layout_gravity="center_horizontal"
             tools:ignore="HardcodedText"/>
 
+        <AutoCompleteTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/input_subject"
+            android:background="@drawable/login_edittext"
+            android:layout_marginHorizontal="30dp"
+            android:padding="15dp"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:hint="Subject"
+            android:layout_gravity="center_horizontal"
+            android:completionThreshold="1"
+            tools:ignore="HardcodedText"/>
+
 
         <Button
             android:id="@+id/button_add_task"

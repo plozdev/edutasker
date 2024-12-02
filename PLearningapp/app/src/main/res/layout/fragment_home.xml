@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".main.HomeFragment"
     android:orientation="vertical">
@@ -77,6 +76,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="30dp"
         android:src="@drawable/add_data"
+        android:backgroundTint="@color/black"
         android:padding="10dp"
         android:id="@+id/fab"/>
 </LinearLayout>

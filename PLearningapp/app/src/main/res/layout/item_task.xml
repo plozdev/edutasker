@@ -2,25 +2,82 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="12dp"
-    app:cardCornerRadius="10dp"
     android:background="@drawable/item_task_layout"
     android:layout_marginHorizontal="10dp"
     android:padding="12dp">
 
-        <TextView
-            android:id="@+id/textViewTask"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/textViewTask"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/font"
+                    android:text="Task"
+                    android:textStyle="bold"
+                    android:layout_marginStart="10dp"
+                    tools:ignore="HardcodedText"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:id="@+id/btnExpand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/arrow_down_float"
+                    android:contentDescription="Expand Task"
+                    tools:ignore="HardcodedText"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:padding="8dp" />
+
+                <ImageView
+                    android:id="@+id/cancel_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@android:drawable/ic_delete"
+                    android:contentDescription="Delete Task"
+                    tools:ignore="HardcodedText"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/btnExpand"
+                    android:padding="8dp" />
+
+
+        </RelativeLayout>
+
+        <!-- Expandable Section -->
+        <LinearLayout
+            android:id="@+id/expandableLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/font"
-            android:text="Task"
-            android:textStyle="bold"
-            android:layout_marginStart="10dp"
-            tools:ignore="HardcodedText"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            android:paddingBottom="8dp"
+            android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/additional_subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Additional Information"
+                    tools:ignore="HardcodedText"
+                    android:textSize="14sp"
+                    android:paddingTop="4dp" />
+
+                <TextView
+                    android:id="@+id/additional_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="dd/mm/yyyy"
+                    tools:ignore="HardcodedText"
+                    android:textSize="14sp"
+                    android:paddingTop="4dp"/>
+        </LinearLayout>
 
 </LinearLayout>

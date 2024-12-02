@@ -47,6 +47,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation (libs.glide)
     implementation (libs.play.services.auth)
     implementation (libs.credentials)

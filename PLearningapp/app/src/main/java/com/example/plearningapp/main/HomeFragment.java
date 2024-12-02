@@ -34,9 +34,8 @@ public class HomeFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         thamChieu(view);
-        setAdapter();
-        fetchRecentUploads();
-
+        fetchUploads();
+        fileAdapter = new FileAdapterMain(fileList);
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), AddFilesActivity.class);
             startActivity(intent);
@@ -49,10 +48,7 @@ public class HomeFragment extends Fragment{
         fileList = new ArrayList<>();
         fab = view.findViewById(R.id.fab);
     }
-    private void setAdapter() {
-        fileAdapter = new FileAdapterMain(fileList);
-    }
-    private void fetchRecentUploads() {
+    private void fetchUploads() {
         firestore.collection("userId").document(userId).collection("files")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -63,12 +59,17 @@ public class HomeFragment extends Fragment{
                             String fileName = document.getString("fileName");
                             String date = document.getString("timestamp");
                             String subject = document.getString("subject");
+                            Log.d("Firestore", " fileName => " + fileName);
+                            Log.d("Firestore", " date => " + date);
+                            Log.d("Firestore", " subject => " + subject);
                             FileModelMain fileModel = new FileModelMain(fileName, date, subject);
                             uploads.add(fileModel);
                         }
                         fileAdapter.updateData(uploads);
+
                         recyclerView.setAdapter(fileAdapter);
                         Log.d("Firestore", "Data fetched successfully");
+                        Log.d("Firestore", "Data: " + uploads);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

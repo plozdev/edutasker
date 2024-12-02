@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">EduTasker</string>
+    <string name="app_name">LearnSphere</string>
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
     <string name="change_avatar">Change Avatar</string>
