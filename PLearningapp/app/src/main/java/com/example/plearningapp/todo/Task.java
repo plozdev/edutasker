@@ -1,6 +1,8 @@
 package com.example.plearningapp.todo;
 
-public class Task {
+import java.io.Serializable;
+
+public class Task implements Serializable {
     private String name, subject, date;
     private boolean isExpanded;
 

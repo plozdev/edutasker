@@ -1,82 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".main.HomeFragment"
-    android:orientation="vertical">
+    tools:context=".main.HomeFragment">
 
-    <ScrollView
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
             android:orientation="vertical"
-            android:layout_marginHorizontal="5dp"
-            android:padding="5dp">
+            android:paddingBottom="30dp">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/title"
-                android:text="@string/app_name"
-                android:fontFamily="@font/font_title"
-                android:textSize="32sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"
                 android:layout_gravity="end"
-                android:layout_marginEnd="45dp"
-                android:layout_marginTop="40dp"/>
+                android:layout_marginTop="40dp"
+                android:fontFamily="@font/font"
+                android:text="@string/app_name"
+                android:textColor="@color/black"
+                android:textSize="32sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/create_data_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:layout_marginHorizontal="40dp"
-                android:orientation="vertical"
                 android:background="@drawable/add_data_button"
-                android:paddingVertical="30dp">
+                android:orientation="vertical"
+                android:paddingBottom="30dp">
+
+                <TextView
+                    android:layout_marginTop="30dp"
+                    android:id="@+id/text_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/font"
+                    android:text="Nothing Here..."
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/text"
-                    android:text="Nothing Here..."
-                    android:textColor="@color/black"
+                    android:id="@+id/TEXT"
+                    android:text="To-do"
+                    android:textSize="40sp"
                     android:fontFamily="@font/font"
-                    android:layout_gravity="center"
-                    android:textSize="16sp"
-                    tools:ignore="HardcodedText"/>
+                    android:textStyle="italic"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    tools:ignore="HardcodedText"
+                    android:visibility="gone"/>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/recycler_view_todo_main"
+                    android:layout_marginHorizontal="15dp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="40dp" />
+
 
 
         </LinearLayout>
 
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-    </ScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="30dp"
         android:src="@drawable/add_data"
-        android:backgroundTint="@color/black"
-        android:padding="10dp"
+        android:text="ADD"
+        android:textColor="@color/white"
+        tools:ignore="HardcodedText"
+        android:background="@drawable/signup_button"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:id="@+id/fab"/>
-</LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progess_bar_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

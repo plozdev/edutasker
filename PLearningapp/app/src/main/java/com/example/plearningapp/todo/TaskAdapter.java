@@ -1,5 +1,4 @@
 package com.example.plearningapp.todo;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,13 +7,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.plearningapp.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
     private final ArrayList<Task> taskList;
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    private final FirebaseUser user = mAuth.getCurrentUser();
 
     public TaskAdapter(ArrayList<Task> taskList) {
         this.taskList = taskList;
@@ -48,7 +51,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             notifyItemRangeChanged(position, taskList.size());
         });
     }
-
     @Override
     public int getItemCount() {
         return taskList.size();

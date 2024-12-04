@@ -37,7 +37,7 @@ public class ChangePassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_pass);
-        thamChieu();
+        started();
         back.setOnClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         changePassButton.setOnClickListener(v -> doChange());
     }
@@ -73,7 +73,7 @@ public class ChangePassword extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     showSuccessDialog();
-                                    startActivity(new Intent(ChangePassword.this, ProfileActivity.class));
+//                                    startActivity(new Intent(ChangePassword.this, ProfileActivity.class));
                                     Log.d(TAG, "User password updated.");
                                 } else {
                                     Toast.makeText(ChangePassword.this, "Failed", Toast.LENGTH_SHORT).show();
@@ -91,7 +91,7 @@ public class ChangePassword extends AppCompatActivity {
                     }
                 });
     }
-    private void thamChieu() {
+    private void started() {
         oldPass = findViewById(R.id.current_password_edittext);
         newPass = findViewById(R.id.new_password_edittext);
         confirmPass = findViewById(R.id.confirm_password_edittext);
