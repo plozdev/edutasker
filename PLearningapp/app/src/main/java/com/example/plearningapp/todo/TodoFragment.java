@@ -20,8 +20,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.example.plearningapp.R;
-import com.example.plearningapp.main.FileModelMain;
 import com.example.plearningapp.main.MainActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +38,7 @@ public class TodoFragment extends Fragment {
     FloatingActionButton fab;
     ImageView back;
     Button buttonAdd, buttonBack;
+    ProgressBar progressBar;
     RecyclerView recyclerViewTask;
     AutoCompleteTextView inputSubject;
     private static final String[] OBJECTS = new String[] { "Toán", "Ngữ Văn", "Anh", "Lý", "Hóa", "Sinh", "Sử", "Địa", "GDCD", "Công nghệ", "Tin học", "Thể dục", "Âm nhạc", "Mỹ thuật", "Ngoại ngữ", "GDQP", "GDTC"};
@@ -73,7 +74,7 @@ public class TodoFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(recyclerViewTask.getContext());
         recyclerViewTask.setLayoutManager(linearLayoutManager);
         back = v.findViewById(R.id.back);
-
+        progressBar = v.findViewById(R.id.progress_bar_todo);
     }
     private void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -107,12 +108,16 @@ public class TodoFragment extends Fragment {
         String date = formatTimestamp(System.currentTimeMillis());
         if (!task.isEmpty() && !subject.isEmpty()) {
             Task ok = new Task(task, subject, date);
-            taskList.add(0, ok);
-            TaskAdapter taskAdapter = new TaskAdapter(taskList);
-            recyclerViewTask.setAdapter(taskAdapter);
+//            FileModelMain ok = new FileModelMain(task, date, subject);
+//            taskList.add(0, ok);
+//            TaskAdapter taskAdapter = new TaskAdapter(taskList);
+//            recyclerViewTask.setAdapter(taskAdapter);
             editTextTask.getText().clear();
             inputSubject.getText().clear();
-            doUpload( task);
+//            doUpload(task);
+            progressBar.setVisibility(View.VISIBLE);
+            doUpload(ok);
+            fetchTask();
             Log.d("Task", "doAddTask: " + taskList);
         } else {
             if (subject.isEmpty()) inputSubject.setError("Fill subject");
@@ -120,36 +125,51 @@ public class TodoFragment extends Fragment {
             Toast.makeText(getActivity(), "Please enter a task", Toast.LENGTH_SHORT).show();
         }
     }
-    private void doUpload(String task) {
+    private void doUpload(Task ok) {
         Map<String, Object> taskMap = new HashMap<>();
-        taskMap.put("task", task);
+//        taskMap.put("task", task);
+            taskMap.put("task", ok.getName());
+            taskMap.put("subject", ok.getSubject());
+            taskMap.put("date", ok.getDate());
+
         db.collection("userId").document(userId).collection("tasks")
                 .add(taskMap)
                 .addOnSuccessListener(documentReference -> {
                     Log.d("Firestore", "Task added with ID: " + documentReference.getId());
+                    progressBar.setVisibility(View.GONE);
                 })
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error adding task", e);
+                    progressBar.setVisibility(View.GONE);
                 });
     }
 
     private void fetchTask() {
+
         db.collection("userId").document(userId).collection("tasks")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (queryDocumentSnapshots.isEmpty()) return ;
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        progressBar.setVisibility(View.GONE);
+                        return;
+                    }
+                    taskList.clear();
                     for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
                         String task = queryDocumentSnapshots.getDocuments().get(i).getString("task");
                         String subject = queryDocumentSnapshots.getDocuments().get(i).getString("subject");
                         String date = queryDocumentSnapshots.getDocuments().get(i).getString("date");
                         Task ok = new Task(task, subject, date);
-                        taskList.add(ok);
+                        taskList.add(0,ok);
                     }
                     TaskAdapter taskAdapter = new TaskAdapter(taskList);
+                    Log.d("Task", "fetchTask: " + taskList);
                     recyclerViewTask.setAdapter(taskAdapter);
+                    Log.d("Firestore", "Tasks fetched successfully");
+                    progressBar.setVisibility(View.GONE);
                 })
                 .addOnFailureListener(e -> {
                     Log.w("Firestore", "Error getting tasks", e);
+                    progressBar.setVisibility(View.GONE);
                 });
     }
 }

@@ -87,7 +87,10 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         List<FileModelMain> uploads = new ArrayList<>();
-                        if (queryDocumentSnapshots.isEmpty()) return;
+                        if (queryDocumentSnapshots.isEmpty()) {
+                            progressBar.setVisibility(View.GONE);
+                            return;
+                        }
                         for (int i=queryDocumentSnapshots.size()-1;i>=0; i--) {
                             String fileName = queryDocumentSnapshots.getDocuments().get(i).getString("fileName");
                             String date = queryDocumentSnapshots.getDocuments().get(i).getString("timestamp");

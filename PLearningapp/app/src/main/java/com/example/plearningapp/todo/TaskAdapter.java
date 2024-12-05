@@ -9,20 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.plearningapp.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.ArrayList;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
     private final ArrayList<Task> taskList;
-    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private final FirebaseUser user = mAuth.getCurrentUser();
+//    private final ArrayList<FileModelMain> taskList;
 
     public TaskAdapter(ArrayList<Task> taskList) {
         this.taskList = taskList;
     }
-
+//    public TaskAdapter(ArrayList<FileModelMain> taskList) {
+//        this.taskList = taskList;
+//    }
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -33,6 +31,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
         Task task = taskList.get(position);
+//        FileModelMain task = taskList.get(position);
         holder.textViewTask.setText(task.getName());
         boolean isExpanded = task.isExpanded();
         holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
